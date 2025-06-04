@@ -36,50 +36,32 @@ int main() {
     }), time_temp.total);
     avg_rand += time_temp.total/cycles;
 
-    #ifdef SERIAL
-
-    time_temp = Add(arr1, arr2, out, arr_size);
-    avg_sum.total += time_temp.total/cycles;
- 
-    time_temp = Sub(arr1, arr2, out, arr_size);
-    avg_sub.total += time_temp.total/cycles;
-
-    time_temp = Mul(arr1, arr2, out, arr_size);
-    avg_mul.total += time_temp.total/cycles;
-
-    time_temp = Div(arr1, arr2, out, arr_size);
-    avg_div.total += time_temp.total/cycles;
-
-    #else
-
-    time_temp = Operation(arr1, arr2, out, arr_size, opadd);
-    time_div(&time_temp, cycles);
-    time_add(&avg_sum, &time_temp);
-
-    time_temp = Operation(arr1, arr2, out, arr_size, opsub);
-    time_div(&time_temp, cycles);
-    time_add(&avg_sub, &time_temp);
-
-    time_temp = Operation(arr1, arr2, out, arr_size, opmul);
-    time_div(&time_temp, cycles);
-    time_add(&avg_mul, &time_temp);
-
-    time_temp = Operation(arr1, arr2, out, arr_size, opdiv);
-    time_div(&time_temp, cycles);
-    time_add(&avg_div, &time_temp);
-
-
-    #endif
+    for(enum Oper i=opadd; i<=opdiv; ++i) {
+      time_temp = Operation(arr1, arr2, out, arr_size, i);
+      time_div(&time_temp, cycles);
+      time_add(&avg_time[i], &time_temp);
+    }
   }
 
   printf("Average time spent per cycle.\nRandomizing:\t%f", avg_rand);
-  #ifdef SERIAL
-  PRINTTIME()
+  for(enum Oper i=opadd; i<=opdiv; ++i) {
+    char* text;
+    switch(i) {
+      case opadd : text = "Summation"; break;
+      case opsub : text = "Subdivision"; break;
+      case opmul : text = "Multiplication"; break;
+      case opdiv : text = "Division"; break;
+    }
+    printf("%s:\n", text);
 
-  #else
-  PRINTTIME(avg_sum, "\nSummation, total:\t%f\n", "\tCopying:\t%f\n", "\tRunning:\t%f\n", "\tReturning:\t%f\n");
+    #ifdef SERIAL
+    PRINTTIME(avg_time[i], "Total:\t%f\n\n");
 
-  #endif
+    #else
+    PRINTTIME(avg_time[i], "Total:\t%f\n", "\tCopying:\t%f\n", "\tRunning:\t%f\n", "\tReturning:\t%f\n\n");
+
+    #endif
+  }
 
   return 0;
 }

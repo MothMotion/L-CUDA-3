@@ -1,3 +1,4 @@
+#ifndef SERIAL
 #include "config.h"
 #include "timer.h"
 #include "vec_oper.h"
@@ -30,10 +31,10 @@ time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size, cons
 
   CUDATIME(({
     switch(op) {
-      case opadd : KAdd<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size);
-      case opsub : KSub<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size);
-      case opmul : KMul<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size);
-      case opdiv : KDiv<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size);
+      case opadd : KAdd<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size); break;
+      case opsub : KSub<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size); break;
+      case opmul : KMul<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size); break;
+      case opdiv : KDiv<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size); break;
     } 
   }), time.run, start, end);
 
@@ -49,3 +50,5 @@ time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size, cons
 
   return time;
 }
+
+#endif
