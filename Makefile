@@ -1,7 +1,7 @@
 CC = gcc
 CCFLAGS = -Wall -Wextra -Iinclude
 NV = nvcc
-NVFLAGS = -Wall -Wextra -Iinclude
+NVFLAGS = -Iinclude
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -33,13 +33,12 @@ DEP := $(patsubst $(OBJ_DIR)/%.o, $(OBJ_DIR)/%.d, $(OBJ))
 DEPFLAGS = -MMD -MF $(@:.o=.d)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(OBJ_DIR)
 	$(CC) $(CCFLAGS) -c $< -o $@ $(DEPFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cu
+	mkdir -p $(OBJ_DIR)
 	$(NV) $(NVFLAGS) -c $< -o $@ $(DEPFLAGS)
-
-$(OBJ_DIR)/:
-	mkdir -p $@
 
 clean:
 	rm -f $(OBJ) $(DEP)

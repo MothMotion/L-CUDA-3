@@ -1,10 +1,9 @@
 #include "config.h"
 #include "random.h"
 #include "timer.h"
-
-#ifdef SERIAL
 #include "vec_oper.h"
-#else
+
+#ifndef SERIAL
 #include "k_vec_oper.h"
 #endif
 
@@ -28,6 +27,8 @@ int main() {
   time_s avg_time[4];
   for(enum Oper i = opadd; i <= opdiv; ++i)
     EMPTYTIME(avg_time[i]);
+
+
 
   for(uint32_t i=0; i<cycles; ++i) {
     GETTIME(({

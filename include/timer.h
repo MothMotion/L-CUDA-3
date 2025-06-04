@@ -2,6 +2,9 @@
 #ifndef TIMER
 #define TIMER
 
+
+
+#include "config.h"
 #include <time.h>
 
 

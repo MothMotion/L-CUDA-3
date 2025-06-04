@@ -1,5 +1,8 @@
+#pragma once
 #if !defined(K_VEC_OPER_H) && !defined(SERIAL)
 #define K_VEC_OPER_H
+
+
 
 #include "config.h"
 #include "timer.h"

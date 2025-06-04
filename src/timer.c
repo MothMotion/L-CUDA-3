@@ -1,6 +1,8 @@
 #include "config.h"
 #include "timer.h"
 
+
+
 void time_add(time_s* to, const time_s* fr) {
   #ifdef SERIAL
   to->total += fr->total;

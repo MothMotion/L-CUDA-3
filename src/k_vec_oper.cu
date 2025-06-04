@@ -1,4 +1,7 @@
 #ifndef SERIAL
+
+
+
 #include "config.h"
 #include "timer.h"
 #include "vec_oper.h"
@@ -7,7 +10,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include <cuda_runtime.h>
+//#include <cuda_runtime.h>
 
 
 
@@ -49,6 +52,30 @@ time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size, cons
   cudaFree(d_out);
 
   return time;
+}
+
+__global__ void KAdd(arr_t* arr1, arr_t* arr2, arr_t* out, uint32_t size) {
+  uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+  if(idx < size)
+    out[idx] = arr1[idx] + arr2[idx];
+}
+
+__global__ void KSub(arr_t* arr1, arr_t* arr2, arr_t* out, uint32_t size) {
+  uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+  if(idx < size)
+    out[idx] = arr1[idx] - arr2[idx];
+}
+
+__global__ void KMul(arr_t* arr1, arr_t* arr2, arr_t* out, uint32_t size) {
+  uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+  if(idx < size)
+    out[idx] = arr1[idx] * arr2[idx];
+}
+
+__global__ void KDiv(arr_t* arr1, arr_t* arr2, arr_t* out, uint32_t size) {
+  uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+  if(idx < size && arr2[idx])
+    out[idx] = arr1[idx] / arr2[idx];
 }
 
 #endif

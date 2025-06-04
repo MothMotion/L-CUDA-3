@@ -1,4 +1,6 @@
 #ifdef SERIAL
+
+
 #include "config.h"
 #include "timer.h"
 #include "vec_oper.h"
@@ -53,7 +55,9 @@ time_s Div(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size) {
   time_s time;
   GETTIME({
     for(uint32_t i=0; i<size; ++i)
-      out[i] = arr1[i] / arr2[i];
+      if(arr2[i])
+        out[i] = arr1[i] / arr2[i];
+      else out[i] = arr1[i];
   }, time.total);
 
   return time;

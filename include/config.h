@@ -2,6 +2,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+
+
 #include <stdint.h>
 
 
@@ -10,6 +12,8 @@
 #define CYCLES (uint32_t)atoi(getenv("CYCLES"))
 #define KBLOCKS (uint32_t)atoi(getenv("KBLOCKS"))
 #define KTHREADS (uint32_t)atoi(getenv("KTHREADS"))
+
+//#define SERIAL
 
 #define arr_t uint8_t
 
