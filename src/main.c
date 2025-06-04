@@ -28,6 +28,14 @@ int main() {
   for(enum Oper i = opadd; i <= opdiv; ++i)
     EMPTYTIME(avg_time[i]);
 
+  #ifdef SERIAL
+  printf("Serial ");
+  #else
+  printf("Parallel ");
+  #endif
+  printf("execution.\nSettings:\n\tArray size:\t%d\n\tCycles:\t\t%d\n\tBlocks:\t\t%d\n\tThreads:\t%d\n\tElement size:\t%d\n\n",
+         arr_size, cycles, KBLOCKS, KTHREADS, (uint32_t)sizeof(arr_t));
+
 
 
   for(uint32_t i=0; i<cycles; ++i) {
@@ -44,12 +52,12 @@ int main() {
     }
   }
 
-  printf("Average time spent per cycle.\nRandomizing:\t%f", avg_rand);
+  printf("Average time spent per cycle.\nRandomizing:\t%f\n", avg_rand);
   for(enum Oper i=opadd; i<=opdiv; ++i) {
     char* text;
     switch(i) {
       case opadd : text = "Summation"; break;
-      case opsub : text = "Subdivision"; break;
+      case opsub : text = "Substraction"; break;
       case opmul : text = "Multiplication"; break;
       case opdiv : text = "Division"; break;
     }
