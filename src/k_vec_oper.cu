@@ -32,12 +32,15 @@ extern "C" time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t
     cudaMemcpy(d_arr2, arr2, size*sizeof(arr_t), cudaMemcpyHostToDevice); 
   }), time.memcpy, start, end);
 
+  dim3 blocks(KBLOCKS, 1, 1);
+  dim3 threads(KTHREADS, 1, 1);
+
   CUDATIME(({
     switch(op) {
-      case opadd : KAdd<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size); break;
-      case opsub : KSub<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size); break;
-      case opmul : KMul<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size); break;
-      case opdiv : KDiv<<<KBLOCKS,KTHREADS>>>(d_arr1, d_arr2, d_out, size); break;
+      case opadd : KAdd<<<blocks,threads>>>(d_arr1, d_arr2, d_out, size); break;
+      case opsub : KSub<<<blocks,threads>>>(d_arr1, d_arr2, d_out, size); break;
+      case opmul : KMul<<<blocks,threads>>>(d_arr1, d_arr2, d_out, size); break;
+      case opdiv : KDiv<<<blocks,threads>>>(d_arr1, d_arr2, d_out, size); break;
     } 
   }), time.run, start, end);
 
