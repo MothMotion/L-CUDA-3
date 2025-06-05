@@ -34,6 +34,8 @@ extern "C" time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t
 
   dim3 blocks(KBLOCKS, 1, 1);
   dim3 threads(KTHREADS, 1, 1);
+  if(!blocks.x)
+    dim3 blocks( ((size%threads.x) ? (size/threads.x + 1) : (size/threads.x)), 1, 1 );
 
   CUDATIME(({
     switch(op) {

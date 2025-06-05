@@ -34,7 +34,7 @@ int main() {
   printf("Parallel ");
   #endif
   printf("execution.\nSettings:\n\tArray size:\t%d\n\tCycles:\t\t%d\n\tBlocks:\t\t%d\n\tThreads:\t%d\n\tElement size:\t%d\n\n",
-         arr_size, cycles, KBLOCKS, KTHREADS, (uint32_t)sizeof(arr_t));
+         arr_size, cycles, ( (KBLOCKS) ? (KBLOCKS) : ((KBLOCKS%arr_size) ? (KBLOCKS/arr_size + 1) : (KBLOCKS)) ), KTHREADS, (uint32_t)sizeof(arr_t));
 
 
 
