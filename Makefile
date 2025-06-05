@@ -21,7 +21,7 @@ all: $(TARGET)
 serial: CCFLAGS += -DSERIAL
 serial: NVFLAGS += -DSERIAL
 serial: $(TARGET)
-	mv $(TARGET) "$(TARGET)_serial"
+	$(CC) $(CCFLAGS) -o "$(TARGET)_serial" $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_C))	
 
 parallel: $(TARGET)
 	mv $(TARGET) "$(TARGET)_parallel"

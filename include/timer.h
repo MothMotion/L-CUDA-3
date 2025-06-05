@@ -1,6 +1,10 @@
 #pragma once
-#ifndef TIMER
-#define TIMER
+#ifndef TIMER_H
+#define TIMER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
 
@@ -21,7 +25,6 @@
   cudaEventRecord(start);\
   code_block;\
   cudaEventRecord(end);\
-  cudaEventSynchronize(end);\
   cudaEventElapsedTime(&time_var, start, end);
 
 #ifdef SERIAL
@@ -68,4 +71,8 @@ void time_sub(time_s* to, const time_s* fr);
 void time_mul(time_s* to, const float fr);
 void time_div(time_s* to, const float fr);
 
+#ifdef __cplusplus
+}
 #endif
+
+#endif // !TIMER_H

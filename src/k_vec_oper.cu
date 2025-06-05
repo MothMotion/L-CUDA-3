@@ -56,6 +56,8 @@ extern "C" time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t
   cudaFree(d_arr2);
   cudaFree(d_out);
 
+  time_div(&time, 1000);
+
   return time;
 }
 
