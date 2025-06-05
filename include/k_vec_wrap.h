@@ -1,10 +1,11 @@
 #pragma once
-#ifndef K_VEC_WRAP_H
+#if !defined(K_VEC_WRAP_H) && !defined(SERIAL)
 #define K_VEC_WRAP_H
 
 
 
 #include "config.h"
+#include "vec_oper.h"
 #include "time.h"
 
 

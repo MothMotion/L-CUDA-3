@@ -1,7 +1,7 @@
 CC = gcc
 CCFLAGS = -Wall -Wextra -Iinclude -I/opt/cuda/include
 NV = nvcc
-NVFLAGS = -Iinclude -I/opt/cuda/include -gencode arch=compute_50,code=sm_50
+NVFLAGS = -Iinclude -I/opt/cuda/include
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -19,6 +19,7 @@ TARGET = program
 all: $(TARGET)
 
 serial: CCFLAGS += -DSERIAL
+serial: NVFLAGS += -DSERIAL
 serial: $(TARGET)
 	mv $(TARGET) "$(TARGET)_serial"
 
