@@ -17,7 +17,7 @@ enum Oper {
   opmul=2, opdiv=3
 };
 
-time_s Operation(arr_t* arr_inp1, arr_t* arr_inp2, arr_t* arr_out, const uint32_t size, const enum Oper operation);
+//time_s Operation(arr_t* arr_inp1, arr_t* arr_inp2, arr_t* arr_out, const uint32_t size, const enum Oper operation);
 
 #ifdef SERIAL
 

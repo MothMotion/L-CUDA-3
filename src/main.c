@@ -4,7 +4,7 @@
 #include "vec_oper.h"
 
 #ifndef SERIAL
-#include "k_vec_oper.h"
+#include "k_vec_wrap.h"
 #endif
 
 #include <stdint.h>

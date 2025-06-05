@@ -1,8 +1,7 @@
-#CC = gcc
 CC = gcc
 CCFLAGS = -Wall -Wextra -Iinclude -I/opt/cuda/include
 NV = nvcc
-NVFLAGS = -Iinclude -gencode arch=compute_50,code=sm_50
+NVFLAGS = -Iinclude -I/opt/cuda/include -gencode arch=compute_50,code=sm_50
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -27,7 +26,7 @@ parallel: $(TARGET)
 	mv $(TARGET) "$(TARGET)_parallel"
 
 $(TARGET): $(OBJ)
-	$(NV) $(NVFLAGS) -o $@ $^
+	$(NV) $(NVFLAGS) -o $@ $^ -L/opt/cuda/lib -lcudart -lcuda
 
 DEP := $(patsubst $(OBJ_DIR)/%.o, $(OBJ_DIR)/%.d, $(OBJ))
 -include $(DEP)

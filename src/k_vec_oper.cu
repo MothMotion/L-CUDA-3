@@ -10,11 +10,12 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include <cuda.h>
 #include <cuda_runtime.h>
 
 
 
-time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size, const enum Oper op) {
+extern "C" time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size, const enum Oper op) {
   time_s time;
   cudaEvent_t start, end;
   cudaEventCreate(&start);
