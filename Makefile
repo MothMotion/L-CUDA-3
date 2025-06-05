@@ -1,7 +1,8 @@
+#CC = gcc
 CC = gcc
-CCFLAGS = -Wall -Wextra -Iinclude
+CCFLAGS = -Wall -Wextra -Iinclude -I/opt/cuda/include
 NV = nvcc
-NVFLAGS = -Iinclude
+NVFLAGS = -Iinclude -gencode arch=compute_50,code=sm_50
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -56,8 +57,8 @@ lsf:
 	$(eval PROJECT_NAME := "mothm_lab4_3")
 	$(eval LOG_FILE := "$(JOB_NAME).log")
 
-	echo -e "#!/bin/bash\nmkdir -p logs err\n\n#BSUB -J $(JOB_NAME)\n#BSUB -P $(PROJECT_NAME)\n#BSUB -W 08:00\n#BSUB -n $(THREADS)\n#BSUB -oo logs/$(LOG_FILE)\n#BSUB -eo err/$(LOG_FILE)\n\nexport ARRAY_SIZE=$(ARRAY_SIZE)\nexport CYCLES=$(CYCLES)\nexport KBLOCKS=$(KBLOCKS)\nexport KTHREADS=$(KTHREADS)\n\nmodule load cuda/11.4\n{ time ./program_$(TYPE) ; } 2> logs/$(JOB_NAME).time" > "./lsf/pr$(KTHREADS)_$(KTHREADS)_$(TYPE).lsf"
+	echo -e "#!/bin/bash\nmkdir -p logs err\n\n#BSUB -J $(JOB_NAME)\n#BSUB -P $(PROJECT_NAME)\n#BSUB -W 08:00\n#BSUB -n $(THREADS)\n#BSUB -oo logs/$(LOG_FILE)\n#BSUB -eo err/$(LOG_FILE)\n\nexport ARRAY_SIZE=$(ARRAY_SIZE)\nexport CYCLES=$(CYCLES)\nexport KBLOCKS=$(KBLOCKS)\nexport KTHREADS=$(KTHREADS)\n\nmodule load cuda/11.4\n{ time ./program_$(TYPE) ; } 2> logs/$(JOB_NAME).time" > "./lsf/pr$(KBLOCKS)_$(KTHREADS)_$(TYPE).lsf"
 
-	chmod +x ./lsf/pr$(THREADS)_$(TYPE).lsf
+	chmod +x ./lsf/pr$(KBLOCKS)_$(KTHREADS)_$(TYPE).lsf
 
 .PHONY: lsf
