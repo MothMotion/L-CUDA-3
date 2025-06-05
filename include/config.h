@@ -15,9 +15,9 @@
 
 //#define SERIAL
 
-#define arr_t uint8_t
+#define arr_t float
 
 #define MIN_RAND 1
-#define MAX_RAND 255
+#define MAX_RAND 10000000
 
 #endif // !CONFIG_H
