@@ -29,8 +29,7 @@ extern "C" time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t
 
   CUDATIME(({
     cudaMemcpy(d_arr1, arr1, size*sizeof(arr_t), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_arr2, arr2, size*sizeof(arr_t), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_out, out, size*sizeof(arr_t), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_arr2, arr2, size*sizeof(arr_t), cudaMemcpyHostToDevice); 
   }), time.memcpy, start, end);
 
   CUDATIME(({
