@@ -15,7 +15,7 @@
 
 
 
-extern "C" time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size, const enum Oper op) {
+time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size, const Oper& op) {
   time_s time;
   cudaEvent_t start, end;
   cudaEventCreate(&start);
@@ -34,8 +34,6 @@ extern "C" time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t
 
   dim3 blocks(KBLOCKS, 1, 1);
   dim3 threads(KTHREADS, 1, 1);
-  if(!blocks.x)
-    dim3 blocks( ((size%threads.x) ? (size/threads.x + 1) : (size/threads.x)), 1, 1 );
 
   CUDATIME(({
     switch(op) {
@@ -43,6 +41,7 @@ extern "C" time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t
       case opsub : KSub<<<blocks,threads>>>(d_arr1, d_arr2, d_out, size); break;
       case opmul : KMul<<<blocks,threads>>>(d_arr1, d_arr2, d_out, size); break;
       case opdiv : KDiv<<<blocks,threads>>>(d_arr1, d_arr2, d_out, size); break;
+      default : break;
     } 
   }), time.run, start, end);
 
@@ -50,9 +49,7 @@ extern "C" time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t
     cudaMemcpy(out, d_out, size, cudaMemcpyDeviceToHost);
   }), time.memret, start, end);
 
-  time.memcpy /= 1000;
-  time.run /= 1000;
-  time.memret /= 1000;
+  time /= 1000;
 
   time.total = time.memcpy + time.run + time.memret;
 
@@ -63,25 +60,27 @@ extern "C" time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t
   return time;
 }
 
-__global__ void KAdd(arr_t* arr1, arr_t* arr2, arr_t* out, uint32_t size) {
+
+
+__global__ void KAdd(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size) {
   uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
   if(idx < size)
     out[idx] = arr1[idx] + arr2[idx];
 }
 
-__global__ void KSub(arr_t* arr1, arr_t* arr2, arr_t* out, uint32_t size) {
+__global__ void KSub(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size) {
   uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
   if(idx < size)
     out[idx] = arr1[idx] - arr2[idx];
 }
 
-__global__ void KMul(arr_t* arr1, arr_t* arr2, arr_t* out, uint32_t size) {
+__global__ void KMul(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size) {
   uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
   if(idx < size)
     out[idx] = arr1[idx] * arr2[idx];
 }
 
-__global__ void KDiv(arr_t* arr1, arr_t* arr2, arr_t* out, uint32_t size) {
+__global__ void KDiv(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size) {
   uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
   if(idx < size && arr2[idx])
     out[idx] = arr1[idx] / arr2[idx];

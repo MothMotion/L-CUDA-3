@@ -4,7 +4,7 @@
 #include "vec_oper.h"
 
 #ifndef SERIAL
-#include "k_vec_wrap.h"
+#include "k_vec_oper.h"
 #endif
 
 #include <stdint.h>
@@ -18,15 +18,13 @@ int main() {
   uint32_t arr_size = ARRAY_SIZE,
            cycles   = CYCLES;
 
-  arr_t *arr1 = malloc(arr_size * sizeof(arr_t)),
-        *arr2 = malloc(arr_size * sizeof(arr_t)),
-        *out  = malloc(arr_size * sizeof(arr_t));
+  arr_t *arr1 = (arr_t*)malloc(arr_size * sizeof(arr_t)),
+        *arr2 = (arr_t*)malloc(arr_size * sizeof(arr_t)),
+        *out  = (arr_t*)malloc(arr_size * sizeof(arr_t));
 
   float avg_rand = 0;
 
-  time_s avg_time[4];
-  for(enum Oper i = opadd; i <= opdiv; ++i)
-    EMPTYTIME(avg_time[i]);
+  time_s avg_time[Oper::size]; 
 
   #ifdef SERIAL
   printf("Serial ");
@@ -45,32 +43,31 @@ int main() {
     }), time_temp.total);
     avg_rand += time_temp.total/cycles;
 
-    for(enum Oper i=opadd; i<=opdiv; ++i) {
-      time_temp = Operation(arr1, arr2, out, arr_size, i);
-      time_div(&time_temp, cycles);
-      time_add(&avg_time[i], &time_temp);
-    }
+    for(uint8_t i=Oper::opadd; i<Oper::size; ++i) 
+      avg_time[i] += Operation(arr1, arr2, out, arr_size, (Oper)i) / cycles;
   }
 
   printf("Average time spent per cycle.\nRandomizing:\t%f\n", avg_rand);
-  for(enum Oper i=opadd; i<=opdiv; ++i) {
+  for(uint8_t i=Oper::opadd; i<Oper::size; ++i) {
     char* text;
     switch(i) {
-      case opadd : text = "Summation"; break;
-      case opsub : text = "Substraction"; break;
-      case opmul : text = "Multiplication"; break;
-      case opdiv : text = "Division"; break;
+      case opadd : text = (char*)"\n\nSummation"; break;
+      case opsub : text = (char*)"\n\nSubstraction"; break;
+      case opmul : text = (char*)"\n\nMultiplication"; break;
+      case opdiv : text = (char*)"\n\nDivision"; break;
+      default : text = (char*)"\n\nUnknown"; break;
     }
     printf("%s:\n", text);
 
     #ifdef SERIAL
-    PRINTTIME(avg_time[i], "Total:\t%f\n\n");
+    avg_time[i].print("Total:\t");
 
     #else
-    PRINTTIME(avg_time[i], "Total:\t%f\n", "\tCopying:\t%f\n", "\tRunning:\t%f\n", "\tReturning:\t%f\n\n");
+    avg_time[i].print("Total:\t", "\n\tCopying:\t", "\n\tRunning:\t", "\n\tReturning:\t");
 
     #endif
   }
+  printf("\n");
 
   return 0;
 }
