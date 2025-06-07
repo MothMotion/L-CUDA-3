@@ -63,11 +63,11 @@ int main() {
     avg_time[i].print("Total:\t");
 
     #else
-    avg_time[i].print("Total:\t", "\n\tCopying:\t", "\n\tRunning:\t", "\n\tReturning:\t");
+    avg_time[i].print("Total:\t", "ms\n\tCopying:\t", "ms\n\tRunning:\t", "ms\n\tReturning:\t");
 
     #endif
+    printf("ms\n");
   }
-  printf("\n");
 
   return 0;
 }
