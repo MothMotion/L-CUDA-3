@@ -41,7 +41,7 @@ int main() {
       Randomize(arr1, arr_size, MIN_RAND, MAX_RAND);
       Randomize(arr2, arr_size, MIN_RAND, MAX_RAND);
     }), time_temp.total);
-    avg_rand += time_temp.total/cycles;
+    avg_rand += time_temp.total/cycles * 1000;
 
     for(uint8_t i=Oper::opadd; i<Oper::size; ++i) 
       avg_time[i] += Operation(arr1, arr2, out, arr_size, (Oper)i) / cycles;
