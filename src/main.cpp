@@ -47,7 +47,7 @@ int main() {
       avg_time[i] += Operation(arr1, arr2, out, arr_size, (Oper)i) / cycles;
   }
 
-  printf("Average time spent per cycle.\nRandomizing:\t%f\n", avg_rand);
+  printf("Average time spent per cycle.\nRandomizing:\t%fms\n", avg_rand);
   for(uint8_t i=Oper::opadd; i<Oper::size; ++i) {
     char* text;
     switch(i) {
