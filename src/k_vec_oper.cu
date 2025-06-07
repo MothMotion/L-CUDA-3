@@ -47,9 +47,7 @@ time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size, con
 
   CUDATIME(({
     cudaMemcpy(out, d_out, size, cudaMemcpyDeviceToHost);
-  }), time.memret, start, end);
-
-  time /= 1000;
+  }), time.memret, start, end); 
 
   time.total = time.memcpy + time.run + time.memret;
 

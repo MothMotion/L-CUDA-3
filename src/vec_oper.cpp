@@ -19,7 +19,7 @@ time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size, con
     case opdiv : func = Div; break;
     default : break;
   }
-  return func(arr1, arr2, out, size);
+  return func(arr1, arr2, out, size) * 1000;
 }
 
 
