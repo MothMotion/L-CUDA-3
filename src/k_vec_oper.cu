@@ -26,10 +26,19 @@ time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size, con
   cudaMalloc((void**)&d_arr2, size*sizeof(arr_t));\
   cudaMalloc((void**)&d_out, size*sizeof(arr_t));\
 
+  cudaStream_t stream;
+  cudaStreamCreate(&stream);
+
 
   CUDATIME(({
-    cudaMemcpy(d_arr1, arr1, size*sizeof(arr_t), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_arr2, arr2, size*sizeof(arr_t), cudaMemcpyHostToDevice); 
+    cudaHostRegister(arr1, size, cudaHostRegisterDefault);
+    cudaHostRegister(arr2, size, cudaHostRegisterDefault);
+
+    cudaMemcpyAsync(d_arr1, arr1, size*sizeof(arr_t), cudaMemcpyHostToDevice, stream);
+    cudaMemcpyAsync(d_arr2, arr2, size*sizeof(arr_t), cudaMemcpyHostToDevice, stream);
+
+    cudaHostUnregister(arr1);
+    cudaHostUnregister(arr2);
   }), time.memcpy, start, end);
 
   dim3 blocks(KBLOCKS, 1, 1);
@@ -46,10 +55,17 @@ time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size, con
   }), time.run, start, end);
 
   CUDATIME(({
-    cudaMemcpy(out, d_out, size, cudaMemcpyDeviceToHost);
+    cudaHostRegister(out, size, cudaHostRegisterDefault);
+
+    cudaMemcpyAsync(out, d_out, size, cudaMemcpyDeviceToHost, stream);
+
+    cudaHostUnregister(out);
   }), time.memret, start, end); 
 
   time.total = time.memcpy + time.run + time.memret;
+
+  cudaStreamSynchronize(stream);
+  cudaStreamDestroy(stream);
 
   cudaFree(d_arr1);
   cudaFree(d_arr2);
